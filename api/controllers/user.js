@@ -70,6 +70,198 @@ const getUserByUsername = async (req, res, next) => {
   }
 };
 
+const getPostsByUser = async (req, res, next) => {
+  const { id } = req.params;
+  const page = Number(req.query.page) || 1;
+  const limit = 10;
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        id: Number(id),
+      },
+    });
+
+    if (!user) {
+      const error = createError.NotFound();
+      throw error;
+    }
+
+    const postCount = await prisma.post.count({
+      where: {
+        userId: Number(id),
+        parentPostId: null,
+      },
+    });
+
+    const repostCount = await prisma.repost.count({
+      where: {
+        userId: Number(id),
+      },
+    });
+
+    const total = postCount + repostCount;
+
+    const posts = await prisma.post.findMany({
+      where: {
+        userId: Number(id),
+        parentPostId: null,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+      include: {
+        user: {
+          select: {
+            id: true,
+            username: true,
+            profile: {
+              select: {
+                name: true,
+                img: true,
+              },
+            },
+          },
+        },
+        replies: true,
+        reposts: true,
+        likes: true,
+      },
+    });
+
+    const reposts = await prisma.repost.findMany({
+      where: {
+        userId: Number(id),
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+      include: {
+        user: {
+          select: {
+            id: true,
+            username: true,
+            profile: {
+              select: {
+                name: true,
+                img: true,
+              },
+            },
+          },
+        },
+        post: {
+          include: {
+            user: {
+              select: {
+                id: true,
+                username: true,
+                profile: {
+                  select: {
+                    name: true,
+                    img: true,
+                  },
+                },
+              },
+            },
+            replies: true,
+            reposts: true,
+            likes: true,
+          },
+        },
+      },
+    });
+
+    const combinedPosts = [...posts, ...reposts].sort(
+      (post1, post2) => new Date(post2.createdAt) - new Date(post1.createdAt)
+    );
+
+    const startIndex = (page - 1) * limit;
+    const endIndex = (page - 1) * limit + limit;
+    const slicedPosts = combinedPosts.slice(startIndex, endIndex);
+
+    return res.status(200).json({
+      info: {
+        total,
+        nextPage: endIndex <= combinedPosts.length - 1 ? page + 1 : null,
+        prevPage: page === 1 ? null : page - 1,
+      },
+      results: slicedPosts,
+    });
+  } catch (error) {
+    return next(error);
+  }
+};
+
+const getLikedPostsByUser = async (req, res, next) => {
+  const { id } = req.params;
+  const page = Number(req.query.page) || 1;
+  const limit = Number(req.query.limit) || 10;
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        id: Number(id),
+      },
+    });
+    if (!user) {
+      const error = createError.NotFound();
+      throw error;
+    }
+    const total = await prisma.like.count({
+      where: {
+        userId: Number(id),
+      },
+    });
+    const likedPosts = await prisma.like.findMany({
+      where: {
+        userId: Number(id),
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+      skip: (page - 1) * limit,
+      take: limit,
+      include: {
+        post: {
+          include: {
+            user: {
+              select: {
+                id: true,
+                username: true,
+                profile: {
+                  select: {
+                    name: true,
+                    img: true,
+                  },
+                },
+              },
+            },
+            replies: true,
+            reposts: true,
+            likes: true,
+            _count: {
+              select: {
+                replies: true,
+                reposts: true,
+                likes: true,
+              },
+            },
+          },
+        },
+      },
+    });
+    return res.status(200).json({
+      info: {
+        total,
+        nextPage:
+          total > (page - 1) * limit + likedPosts.length ? page + 1 : null,
+        prevPage: page === 1 ? null : page - 1,
+      },
+      results: likedPosts,
+    });
+  } catch (error) {
+    return next(error);
+  }
+};
+
 const followUser = async (req, res, next) => {
   const { followeeId } = req.body;
   const { userId } = req;
@@ -261,6 +453,97 @@ const getFolloweesList = async (req, res, next) => {
         prevPage: page === 1 ? null : page - 1,
       },
       results: followees,
+    });
+  } catch (error) {
+    return next(error);
+  }
+};
+
+const getRepliesByUser = async (req, res, next) => {
+  const { id } = req.params;
+  const page = Number(req.query.page) || 1;
+  const limit = Number(req.query.limit) || 10;
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        id: Number(id),
+      },
+    });
+    if (!user) {
+      const error = createError.NotFound();
+      throw error;
+    }
+    const total = await prisma.post.count({
+      where: {
+        userId: user.id,
+        NOT: {
+          parentPostId: null,
+        },
+        parentPost: {
+          NOT: {
+            userId: user.id,
+          },
+        },
+      },
+    });
+    const replies = await prisma.post.findMany({
+      where: {
+        userId: user.id,
+        NOT: {
+          parentPostId: null,
+        },
+        parentPost: {
+          NOT: {
+            userId: user.id,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+      skip: (page - 1) * limit,
+      take: limit,
+      include: {
+        user: {
+          select: {
+            id: true,
+            username: true,
+            profile: {
+              select: {
+                name: true,
+                img: true,
+              },
+            },
+          },
+        },
+        replies: true,
+        reposts: true,
+        likes: true,
+        parentPost: {
+          include: {
+            user: {
+              select: {
+                id: true,
+                username: true,
+                profile: {
+                  select: {
+                    name: true,
+                    img: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+    return res.status(200).json({
+      info: {
+        total,
+        nextPage: total > (page - 1) * limit + replies.length ? page + 1 : null,
+        prevPage: page === 1 ? null : page - 1,
+      },
+      results: replies,
     });
   } catch (error) {
     return next(error);
@@ -463,10 +746,13 @@ const updateDateOfBirth = async (req, res, next) => {
 
 module.exports = {
   getUserByUsername,
+  getPostsByUser,
+  getLikedPostsByUser,
   followUser,
   unFollowUser,
   getFollowersList,
   getFolloweesList,
+  getRepliesByUser,
   updateProfile,
   getAuthUserInfo,
   updateUsername,
