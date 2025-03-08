@@ -1,0 +1,99 @@
+on:
+  push:
+    branches: ["main", "deploy-test", "TS-28-deployment"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    # Start a PostgreSQL container as a service for this job
+    services:
+      postgres:
+        image: postgres:13
+        env:
+          POSTGRES_DB: twitter
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: core%4052
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+
+      - name: List Files
+        run: |
+          ls
+          echo "Files listed"
+
+      - name: Install & build frontend
+        run: |
+          cd client
+          npm install
+          npm run build
+
+      - name: Install backend dependencies
+        run: |
+          cd api
+          npm install
+
+      # Optional: wait a few seconds to ensure that PostgreSQL is ready
+      - name: Wait for PostgreSQL
+        run: sleep 10
+
+      - name: Run Prisma Migrations
+        env:
+          DATABASE_URL: postgres://postgres:core%4052@localhost:5432/twitter
+        run: |
+          cd api
+          npx prisma migrate dev --name init
+
+      - name: Seed Database (twitter app)
+        env:
+          DATABASE_URL: postgres://postgres:core%4052@localhost:5432/twitter
+        run: |
+          cd api
+          npx prisma db seed
+
+      - name: Start backend server
+        run: |
+          cd api
+          npm start
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+
+      - name: Docker login
+        uses: docker/login-action@v2
+        with:
+          username: joesouaiddd
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and push Docker image
+        run: |
+          docker build . -t joesouaiddd/twitter-app:${{ github.sha }}
+          docker push joesouaiddd/twitter-app:${{ github.sha }}
+          echo "Docker image built and pushed"
+
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: "twitter-clone-app"
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          images: "joesouaiddd/twitter-app:${{ github.sha }}"
