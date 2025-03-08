@@ -22,7 +22,6 @@ const Signup = () => {
   const { login } = useAuth();
 
   const googleSignup = useMutation(({ token }) => {
-  
     return axios.post(`${API_BASE_URL}/api/auth/signup/google`, { token });
   });
 

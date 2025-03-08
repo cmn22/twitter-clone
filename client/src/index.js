@@ -20,7 +20,7 @@ root.render(
         <ThemeProvider>
           <AuthProvider>
             <SocketProvider>
-    <App />
+              <App />
             </SocketProvider>
           </AuthProvider>
         </ThemeProvider>
