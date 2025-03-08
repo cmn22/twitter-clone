@@ -15,7 +15,7 @@ import { loadScript } from '../utils/utils';
 import * as logger from '../utils/logger';
 
 const Signup = () => {
-  usePageTitle('Sign-up / Kookoo');
+  usePageTitle('Sign-up / Twittie');
   const [openSignupModal, setOpenSignupModal] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -81,7 +81,7 @@ const Signup = () => {
       <div className="max-w-xs w-full">
         <div className="mb-4">
           <h3 className="text-on-background text-3xl font-black text-center">
-            Twitter
+            Join Twittie today.
           </h3>
         </div>
         {/* <div className="mb-4">

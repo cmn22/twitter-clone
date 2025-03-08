@@ -9,7 +9,7 @@ import usePageTitle from '../hooks/usePageTitle';
 import { API_BASE_URL } from '../utils/config';
 
 const Messages = () => {
-  usePageTitle('Messages / Kookoo');
+  usePageTitle('Messages / Twittie');
   const { isAuthenticated, user } = useAuth();
   const messagesQuery = useQuery(
     'messages',

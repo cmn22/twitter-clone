@@ -17,7 +17,7 @@ import { signinFormValidator } from '../utils/validator';
 import usePageTitle from '../hooks/usePageTitle';
 
 const Signin = () => {
-  usePageTitle('Sign-in / Kookoo');
+  usePageTitle('Sign-in / Twittie');
   const navigate = useNavigate();
   const location = useLocation();
   const { login } = useAuth();
@@ -132,7 +132,7 @@ const Signin = () => {
       <div className="max-w-xs w-full">
         <div className="mb-4">
           <h3 className="text-on-background text-3xl font-black text-center">
-            Sign in to Kookoo
+            Sign in to Twittie
           </h3>
         </div>
         <div className="mb-4">

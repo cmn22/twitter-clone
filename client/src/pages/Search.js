@@ -16,7 +16,7 @@ import { API_BASE_URL } from '../utils/config';
 
 const Search = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  usePageTitle('Search / Kookoo');
+  usePageTitle('Search / Twittie');
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
   const {
     data,

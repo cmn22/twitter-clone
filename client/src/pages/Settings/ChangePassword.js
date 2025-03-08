@@ -16,7 +16,7 @@ import axios from '../../utils/axios';
 import { API_BASE_URL } from '../../utils/config';
 
 const ChangePassword = () => {
-  usePageTitle('Change password / Kookoo');
+  usePageTitle('Change password / Twittie');
   const navigate = useNavigate();
 
   const { validateForm } = changePasswordFormValidator;

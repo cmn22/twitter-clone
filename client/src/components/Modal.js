@@ -71,7 +71,7 @@ Modal.propTypes = {
 Modal.defaultProps = {
   closeButtonVisible: true,
   onDismiss: () => {},
-  title: 'Kookoo',
+  title: 'Twittie',
   customHeader: null,
   rounded: false,
   headerVisible: true,

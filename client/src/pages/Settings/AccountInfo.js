@@ -13,7 +13,7 @@ import Spinner from '../../components/Spinner';
 import { API_BASE_URL } from '../../utils/config';
 
 const AccountInfo = () => {
-  usePageTitle('Account information / Kookoo');
+  usePageTitle('Account information / Twittie');
   const navigate = useNavigate();
   const { data, isLoading, isError } = useQuery(
     'account',

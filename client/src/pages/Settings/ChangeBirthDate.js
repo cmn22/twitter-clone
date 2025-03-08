@@ -18,7 +18,7 @@ import axios from '../../utils/axios';
 import { API_BASE_URL } from '../../utils/config';
 
 const ChangeBirthDate = () => {
-  usePageTitle('Change birth date / Kookoo');
+  usePageTitle('Change birth date / Twittie');
   const navigate = useNavigate();
   const { updateUser } = useAuth();
   const { validateForm } = ChangeBirthDateValidator;

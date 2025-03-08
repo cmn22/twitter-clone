@@ -17,7 +17,7 @@ import axios from '../../utils/axios';
 import { API_BASE_URL } from '../../utils/config';
 
 const ChangeEmail = () => {
-  usePageTitle('Change email / Kookoo');
+  usePageTitle('Change email / Twittie');
   const navigate = useNavigate();
   const { updateUser } = useAuth();
 

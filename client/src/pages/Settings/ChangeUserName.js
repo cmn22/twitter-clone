@@ -17,7 +17,7 @@ import axios from '../../utils/axios';
 import { API_BASE_URL } from '../../utils/config';
 
 const ChangeUserName = () => {
-  usePageTitle('Change username / Kookoo');
+  usePageTitle('Change username / Twittie');
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 

@@ -19,7 +19,7 @@ import { API_BASE_URL } from '../utils/config';
 
 const Home = () => {
   useScrollToTop();
-  const { setPageTitle } = usePageTitle('Home / Kookoo');
+  const { setPageTitle } = usePageTitle('Home / Twittie');
   const [modalOpen, setModalOpen] = useState(false);
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -72,7 +72,7 @@ const Home = () => {
   useEffect(() => {
     if (location.pathname === '/home') {
       setModalOpen(false);
-      setPageTitle('Home / Kookoo');
+      setPageTitle('Home / Twittie');
     }
   }, [location.pathname, setPageTitle]);
 

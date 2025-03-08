@@ -17,7 +17,7 @@ import usePageTitle from '../hooks/usePageTitle';
 import { API_BASE_URL } from '../utils/config';
 
 const Notifications = () => {
-  usePageTitle('Notifications / Kookoo');
+  usePageTitle('Notifications / Twittie');
   const { data, hasNextPage, isLoading, fetchNextPage } = useNotifications();
   const queryClient = useQueryClient();
   const markNotificationAsRead = useMutation(

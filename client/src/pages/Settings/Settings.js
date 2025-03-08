@@ -8,7 +8,7 @@ import usePageTitle from '../../hooks/usePageTitle';
 import PageHeader from '../../components/PageHeader';
 
 const Settings = () => {
-  usePageTitle('Settings / Kookoo');
+  usePageTitle('Settings / Twittie');
   return (
     <div className="flex min-h-full">
       <div className="flex-1 border-r border-on-surface/20 min-h-full">

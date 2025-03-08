@@ -9,7 +9,7 @@ import RadioButton from '../../components/RadioButton';
 import { useTheme } from '../../contexts/theme-context';
 
 const Display = () => {
-  usePageTitle('Display / Kookoo');
+  usePageTitle('Display / Twittie');
   const navigate = useNavigate();
   const {
     primaryColor,
