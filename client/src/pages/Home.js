@@ -15,6 +15,7 @@ import useInView from '../hooks/useInView';
 import { useAuth } from '../contexts/auth-context';
 
 import axios from '../utils/axios';
+import { API_BASE_URL } from '../utils/config';
 
 const Home = () => {
   useScrollToTop();
@@ -32,15 +33,12 @@ const Home = () => {
       ['posts', 'feed', user.id],
       async ({ pageParam = 1 }) => {
         try {
-          const response = await axios.get(
-            `http://localhost:5001/api/feed/home`,
-            {
-              params: {
-                page: pageParam,
-                limit: 5,
-              },
-            }
-          );
+          const response = await axios.get(`${API_BASE_URL}/api/feed/home`, {
+            params: {
+              page: pageParam,
+              limit: 5,
+            },
+          });
           return response.data;
         } catch (error) {
           return error;

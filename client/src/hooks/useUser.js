@@ -1,10 +1,11 @@
 import { useQuery } from 'react-query';
 
 import axios from '../utils/axios';
+import { API_BASE_URL } from '../utils/config';
 
 const getUserByUsername = async (username) => {
   // eslint-disable-next-line prettier/prettier
-  const { data } = await axios.get(`http://localhost:5001/api/users/user/${username}`);
+  const { data } = await axios.get(`${API_BASE_URL}/api/users/user/${username}`);
   return data;
 };
 

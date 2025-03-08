@@ -11,13 +11,14 @@ import useForm from '../../hooks/useForm';
 import axios from '../../utils/axios';
 import { newPostValidator } from '../../utils/validator';
 import { useAuth } from '../../contexts/auth-context';
+import { API_BASE_URL } from '../../utils/config';
 
 const ComposePost = () => {
   const [progress, setProgress] = useState(0);
   const navigate = useNavigate();
   const { state } = useLocation();
   const createNewPost = useMutation(({ content }) => {
-    return axios.post('/api/post/create-post', {
+    return axios.post(`${API_BASE_URL}/api/post/create-post`, {
       content,
     });
   });
