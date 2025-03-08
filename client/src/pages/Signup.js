@@ -81,7 +81,7 @@ const Signup = () => {
       <div className="max-w-xs w-full">
         <div className="mb-4">
           <h3 className="text-on-background text-3xl font-black text-center">
-            Join Kookoo today.
+            Twitter
           </h3>
         </div>
         {/* <div className="mb-4">

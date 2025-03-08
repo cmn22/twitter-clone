@@ -24,7 +24,7 @@ root.render(
             </SocketProvider>
           </AuthProvider>
         </ThemeProvider>
-        <ReactQueryDevtools initialIsOpen={false} position="top-right" />
+        <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </Router>
   </React.StrictMode>
