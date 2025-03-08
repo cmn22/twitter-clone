@@ -10,11 +10,11 @@ jobs:
     # Start a PostgreSQL container as a service for this job
     services:
       postgres:
-        image: postgres:13
+        image: postgres:16
         env:
           POSTGRES_DB: twitter
           POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: core%4052
+          POSTGRES_PASSWORD: souaid123
         ports:
           - 5432:5432
         options: >-
