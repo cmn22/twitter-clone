@@ -20,11 +20,11 @@ root.render(
         <ThemeProvider>
           <AuthProvider>
             <SocketProvider>
-    <App />
+              <App />
             </SocketProvider>
           </AuthProvider>
         </ThemeProvider>
-        <ReactQueryDevtools initialIsOpen={false} position="top-right" />
+        <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </Router>
   </React.StrictMode>

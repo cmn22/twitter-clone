@@ -22,6 +22,7 @@ const Signup = () => {
   const { login } = useAuth();
 
   const googleSignup = useMutation(({ token }) => {
+    // eslint-disable-next-line prettier/prettier
   
     return axios.post(`${API_BASE_URL}/api/auth/signup/google`, { token });
   });
@@ -82,7 +83,7 @@ const Signup = () => {
       <div className="max-w-xs w-full">
         <div className="mb-4">
           <h3 className="text-on-background text-3xl font-black text-center">
-            Join Kookoo today.
+            Twitter
           </h3>
         </div>
         {/* <div className="mb-4">
