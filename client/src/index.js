@@ -9,6 +9,7 @@ import reportWebVitals from './reportWebVitals';
 import { AuthProvider } from './contexts/auth-context';
 import { SocketProvider } from './contexts/socket-context';
 import { ThemeProvider } from './contexts/theme-context';
+import { register as registerServiceWorker } from './serviceWorkerRegistration';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 const queryClient = new QueryClient();
@@ -29,6 +30,9 @@ root.render(
     </Router>
   </React.StrictMode>
 );
+
+// Register the Service Worker
+registerServiceWorker();
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
