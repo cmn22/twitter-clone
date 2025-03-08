@@ -10,7 +10,7 @@ import useForm from '../hooks/useForm';
 import { useAuth } from '../contexts/auth-context';
 
 import { loadScript } from '../utils/utils';
-import { GOOGLE_CLIENT_ID } from '../utils/config';
+import { GOOGLE_CLIENT_ID, API_BASE_URL } from '../utils/config';
 import * as logger from '../utils/logger';
 
 import { signinFormValidator } from '../utils/validator';
@@ -25,7 +25,7 @@ const Signin = () => {
   const { validateForm } = signinFormValidator;
 
   const loginPassword = useMutation(({ username, password }) => {
-    return axios.post('http://localhost:5001/api/auth/login/password', {
+    return axios.post(`${API_BASE_URL}/api/auth/login/password`, {
       username,
       password,
     });

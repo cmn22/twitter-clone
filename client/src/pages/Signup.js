@@ -22,8 +22,6 @@ const Signup = () => {
   const { login } = useAuth();
 
   const googleSignup = useMutation(({ token }) => {
-    // eslint-disable-next-line prettier/prettier
-  
     return axios.post(`${API_BASE_URL}/api/auth/signup/google`, { token });
   });
 

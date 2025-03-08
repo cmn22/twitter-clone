@@ -19,7 +19,6 @@ const ComposePost = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
   const createNewPost = useMutation(({ content }) => {
-    // eslint-disable-next-line no-undef
     return axios.post(`${API_BASE_URL}/api/post/create-post`, {
       content,
     });
