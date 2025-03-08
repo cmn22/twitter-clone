@@ -23,9 +23,6 @@ router.post(
   generateAuthTokens
 );
 
-router.post('/signup/google', authController.signupGoogle, generateAuthTokens);
-router.post('/signin/google', authController.signupGoogle, generateAuthTokens);
-
 router.post(
   '/signup/validate-email',
   checkSchema(signupSchema.validateEmail),
@@ -59,6 +56,7 @@ router.patch(
 );
 
 router.post('/verify-token', authController.verifyAndGenerateAccessToken);
+
 router.post(
   '/change-password',
   isAuthenticated,
@@ -66,6 +64,7 @@ router.post(
   validateRequest,
   authController.changePassword
 );
+
 router.post('/logout', isAuthenticated, authController.logout);
 
 module.exports = router;
