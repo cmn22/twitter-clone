@@ -24,14 +24,30 @@ import SignupSuccess from './pages/SignupSuccess';
 import UserProfile from './pages/UserProfile';
 import Follow from './pages/Follow';
 import NoMatch from './pages/NoMatch';
+import PostDetail from './pages/PostDetail';
 import Notifications from './pages/Notifications';
-
 import Messages from './pages/Messages';
 import Chat from './pages/Chat';
+import Search from './pages/Search';
+import Settings from './pages/Settings/Settings';
+import AccountInfo from './pages/Settings/AccountInfo';
+import ChangePassword from './pages/Settings/ChangePassword';
+import ChangeUserName from './pages/Settings/ChangeUserName';
+import ChangeEmail from './pages/Settings/ChangeEmail';
+import ChangeBirthDate from './pages/Settings/ChangeBirthDate';
+import EditProfile from './pages/Settings/EditProfile';
+import Display from './pages/Settings/Display';
 
 import Layout from './components/Layout';
+import SplashScreen from './components/SplashScreen';
 import Modal from './components/Modal';
 import ComposePost from './components/Posts/ComposePost';
+import UserPosts from './components/Posts/UserPosts';
+import PostsAndReplies from './components/Posts/PostsAndReplies';
+import LikedPosts from './components/Posts/LikedPosts';
+import FolloweesList from './components/FolloweesList';
+import FollowersList from './components/FollowersList';
+import AddPostHeader from './components/AddPostHeader';
 
 import useMediaQuery from './hooks/useMediaQuery';
 import { API_BASE_URL } from './utils/config';
@@ -140,7 +156,14 @@ const App = () => {
               </RequireAuth>
             }
           />
-          
+          <Route
+            path="search"
+            element={
+              <RequireAuth redirectTo="/signup">
+                <Search />
+              </RequireAuth>
+            }
+          />
           <Route
             path="notifications"
             element={
@@ -149,7 +172,88 @@ const App = () => {
               </RequireAuth>
             }
           />
-         
+          <Route
+            path="settings"
+            element={
+              <RequireAuth redirectTo="/signup">
+                <Settings />
+              </RequireAuth>
+            }
+          >
+            {isWidthGreaterThan640 && (
+              <>
+                <Route
+                  index
+                  element={
+                    <RequireAuth redirectTo="/signup">
+                      <Navigate to="account" />
+                    </RequireAuth>
+                  }
+                />
+                <Route
+                  path="account"
+                  element={
+                    <RequireAuth redirectTo="/signup">
+                      <AccountInfo />
+                    </RequireAuth>
+                  }
+                />
+                <Route
+                  path="password"
+                  element={
+                    <RequireAuth redirectTo="/signup">
+                      <ChangePassword />
+                    </RequireAuth>
+                  }
+                />
+                <Route
+                  path="username"
+                  element={
+                    <RequireAuth redirectTo="/signup">
+                      <ChangeUserName />
+                    </RequireAuth>
+                  }
+                />
+                <Route
+                  path="email"
+                  element={
+                    <RequireAuth redirectTo="/signup">
+                      <ChangeEmail />
+                    </RequireAuth>
+                  }
+                />
+                <Route
+                  path="birthdate"
+                  element={
+                    <RequireAuth redirectTo="/signup">
+                      <ChangeBirthDate />
+                    </RequireAuth>
+                  }
+                />
+                <Route
+                  path="display"
+                  element={
+                    <RequireAuth redirectTo="/signup">
+                      <Display />
+                    </RequireAuth>
+                  }
+                />
+              </>
+            )}
+            <Route
+              path="profile"
+              element={
+                <RequireAuth redirectTo="/signup">
+                  <Navigate
+                    to={`/${user.username}`}
+                    state={{
+                      from: location,
+                    }}
+                  />
+                </RequireAuth>
+              }
+            />
+          </Route>
           <Route
             path="messages"
             element={
@@ -173,12 +277,43 @@ const App = () => {
               </RequireAuth>
             }
           >
-            
-            
-            
-            
+            <Route
+              index
+              element={
+                <RequireAuth redirectTo="/signup">
+                  <UserPosts />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="posts"
+              element={
+                <RequireAuth redirectTo="/signup">
+                  <UserPosts />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="with_replies"
+              element={
+                <RequireAuth redirectTo="/signup">
+                  <PostsAndReplies />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="likes"
+              element={
+                <RequireAuth redirectTo="/signup">
+                  <LikedPosts />
+                </RequireAuth>
+              }
+            />
           </Route>
-          
+          <Route
+            path="/:username/post/:postId"
+            element={<PostDetail key={location.pathname} />}
+          />
           <Route
             path="/:username/list"
             element={
