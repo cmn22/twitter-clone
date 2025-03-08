@@ -1,12 +1,10 @@
 const bcrypt = require('bcrypt');
 const createError = require('http-errors');
 const { customAlphabet } = require('nanoid');
-const { OAuth2Client } = require('google-auth-library');
 const jwt = require('jsonwebtoken');
 const ms = require('ms');
 
 const prisma = require('../services/connect-db');
-const { GOOGLE_CLIENT_ID } = require('../utils/config');
 const { clearTokens, generateJWT } = require('../utils/auth');
 const {
   REFRESH_TOKEN_SECRET,
@@ -16,7 +14,6 @@ const {
 
 const nanoid = customAlphabet('1234567890', 10);
 
-const googleClient = new OAuth2Client(GOOGLE_CLIENT_ID);
 
 const loginPassword = async (req, res, next) => {
   const { username, password } = req.body;
@@ -158,45 +155,6 @@ const signupPassword = {
   },
 };
 
-const signupGoogle = async (req, res, next) => {
-  const { token } = req.body;
-  try {
-    const ticket = await googleClient.verifyIdToken({
-      idToken: token,
-      audience: GOOGLE_CLIENT_ID,
-    });
-    const payload = ticket.getPayload();
-    const existingUser = await prisma.user.findUnique({
-      where: {
-        email: payload.email,
-      },
-    });
-    if (existingUser) {
-      req.userId = existingUser.id;
-      return next();
-    }
-    const { name, email, sub: googleId } = payload;
-    const newUser = await prisma.user.create({
-      data: {
-        email,
-        username: name.toLowerCase().split(' ')[0] + nanoid(),
-        googleId,
-        provider: 'google',
-        profile: {
-          create: {
-            name,
-            img: 'https://storage.googleapis.com/twitter-clone-347513.appspot.com/images/default_avatar.jpg',
-          },
-        },
-      },
-    });
-    req.userId = newUser.id;
-    return next();
-  } catch (error) {
-    return next(error);
-  }
-};
-
 const verifyAndGenerateAccessToken = async (req, res, next) => {
   const { signedCookies } = req;
   const { refreshToken } = signedCookies;
@@ -310,7 +268,6 @@ const logout = async (req, res, next) => {
 module.exports = {
   loginPassword,
   signupPassword,
-  signupGoogle,
   verifyAndGenerateAccessToken,
   changePassword,
   logout,
